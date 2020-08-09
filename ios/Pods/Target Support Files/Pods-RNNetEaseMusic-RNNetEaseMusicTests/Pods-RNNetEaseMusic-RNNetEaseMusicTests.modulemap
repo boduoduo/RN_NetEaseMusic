@@ -1,0 +1,6 @@
+module Pods_RNNetEaseMusic_RNNetEaseMusicTests {
+  umbrella header "Pods-RNNetEaseMusic-RNNetEaseMusicTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
