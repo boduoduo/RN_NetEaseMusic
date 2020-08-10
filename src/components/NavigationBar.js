@@ -58,9 +58,9 @@ const styles = StyleSheet.create({
   container: {
     left: 0,
     right: 0,
-    height: 88,
+    height: 64,
     backgroundColor: '#d43c33',
-    paddingTop: 44,
+    paddingTop: 20,
   },
   bottomContainer: {
     position: 'relative',
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   leftImage: {
-    marginLeft: 12,
+    marginLeft: 0,
     width: 44,
     height: 44,
   },
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   rightImage: {
-    marginRight: 12,
+    marginRight: 0,
     width: 44,
     height: 44
   }

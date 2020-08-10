@@ -8,21 +8,31 @@
 
 import React from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
+  StyleSheet
 } from 'react-native';
 import NavigationBar from './src/components/NavigationBar'
+// import { createStackNavigator } from 'react-navigation-stack'
+// import { createAppContainer } from 'react-navigation'
 import RootHome from './src/pages/RootHome'
+import Detail from './src/pages/Detail'
 
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
+// const AppNavigator = createStackNavigator(
+//   {
+//     home: RootHome,
+//     detail: Detail
+//   },
+//   {
+//     initialRouteName: 'home'
+//   }
+// )
+
+// const AppContainer = createAppContainer(AppNavigator)
+
+const App = () => {
   return (
     <>
       <NavigationBar/>

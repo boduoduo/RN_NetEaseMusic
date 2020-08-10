@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Dimensions, 
   Image, 
-  TouchableOpacity 
+  TouchableOpacity,
+  Alert 
 } from 'react-native'
 import Swiper from 'react-native-swiper'
 
@@ -17,13 +18,13 @@ export default function Banner(props) {
   }
 
   return (
-    <>
+    <View style={styles.container}>
       <Swiper 
-        style={styles.wrapper} 
+        style={styles.wrapper}
         height={200}
         autoplay
         autoplayTimeout={2}  
-        paginationStyle={{height: 10, top: 180}}
+        paginationStyle={{height: 10, top: 130}}
         // showsPagination={false}       //为false不显示下方圆点
         dot={<View style={{           //未选中的圆点样式
           backgroundColor: '#fff',
@@ -48,27 +49,30 @@ export default function Banner(props) {
               <View style={styles.slide} key={index}>
                 <TouchableOpacity 
                   style={styles.image} 
-                  onPress={bannerClicked(item, index)}>
-                  <Image style={styles.image} source={{uri: item.pic}}/>
+                  onPress={() => {
+                    Alert.alert(item.url, index)
+                  }}>
+                  <Image style={styles.image} source={{ uri: item.pic }}/>
                 </TouchableOpacity>
               </View>
             )
           })
         }
       </Swiper>
-    </>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
+  container: {
     width: Dimensions.width,
-    height: 200,
-    position: 'relative'
+    height: 150,
+  },
+  wrapper: {
   },
   slide: {
     width: Dimensions.width,
-    height: 200,
+    height: 150,
   },
   image: {
     width: Dimensions.width,
