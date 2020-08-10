@@ -18,7 +18,9 @@ export default function Personalized(props) {
     const { name, picUrl } = item
     return (
       <View style={styles.renderItem}>
-        <TouchableOpacity style={styles.renderBtn}>
+        <TouchableOpacity style={styles.renderBtn} onPress={()=>{
+          props.itemClicked(item)
+        }}>
           <Image style={styles.image} source={{ uri: picUrl }} defaultSource={require('../images/loading.png')}></Image>
           <Text style={styles.desc} numberOfLines={2}>{ name }</Text>
         </TouchableOpacity>

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { 
-  View, 
-  Text, 
+import {
   StyleSheet,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native'
 
 import {
@@ -17,7 +16,7 @@ import Banner from '../components/Banner'
 import Personalized from '../components/Personalized'
 import SongList from '../components/SongList'
 
-export default function Recommend() {
+export default function Recommend(props) {
   const [banner, setBanner] = useState([])
   const [personalize, setPersonalize] = useState([])
   const [albums, setAlbums] = useState([])
@@ -70,11 +69,15 @@ export default function Recommend() {
     }
   }, [])
 
+  const personalizeClicked = (item) => {
+    props.gotoDetail(item)
+  }
+
   return (
     <ScrollView>
       <Banner banner={banner}/>
-      <Personalized list={personalize}/>
-      <Personalized list={albums} title={'最新专辑'}/>
+      <Personalized list={personalize} itemClicked={personalizeClicked}/>
+      <Personalized list={albums} title={'最新专辑'} itemClicked={personalizeClicked}/>
       <SongList list={songs}/>
     </ScrollView>
   )
