@@ -17,7 +17,9 @@ export default function SongList(props) {
     const { name, picUrl, singer } = item
     return (
       <View style={styles.renderItem}>
-        <TouchableOpacity style={styles.wrapper}>
+        <TouchableOpacity style={styles.wrapper} onPress={()=>{
+          props.itemClicked(item)
+        }}>
           <Image style={styles.image} source={{ uri: picUrl }} defaultSource={require('../images/loading.png')}/>
           <View style={styles.right}>
           <Text style={styles.title} numberOfLines={1}>{ name }</Text>
@@ -45,7 +47,8 @@ export default function SongList(props) {
 
 const styles = StyleSheet.create({
   container: {
-    width: Dimensions.width
+    width: Dimensions.width,
+    backgroundColor: '#fff'
   },
   topTitle: {
     marginTop: 10,

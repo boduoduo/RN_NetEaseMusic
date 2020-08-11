@@ -47,7 +47,7 @@ export default function Recommend(props) {
         let list = []
         res.result.forEach(value => {
           let obj = {}
-          obj.id = value.id
+          obj.id = value.id.toString()
           obj.name = value.name
           obj.picUrl = value.picUrl
           let singer = ''
@@ -73,12 +73,20 @@ export default function Recommend(props) {
     props.gotoDetail(item)
   }
 
+  const bannerClicked = (item) => {
+    Alert.alert(JSON.stringify(item))
+  }
+
+  const gotoPlayDetail = (item) => {
+    props.gotoPlayDetail(item)
+  }
+
   return (
     <ScrollView>
-      <Banner banner={banner}/>
-      <Personalized list={personalize} itemClicked={personalizeClicked}/>
-      <Personalized list={albums} title={'最新专辑'} itemClicked={personalizeClicked}/>
-      <SongList list={songs}/>
+      <Banner banner={banner} bannerClicked={bannerClicked}/>
+      <Personalized type={'personalize'} list={personalize} itemClicked={personalizeClicked}/>
+      <Personalized type={'album'} list={albums} title={'最新专辑'} itemClicked={personalizeClicked}/>
+      <SongList list={songs} itemClicked={gotoPlayDetail} />
     </ScrollView>
   )
 }

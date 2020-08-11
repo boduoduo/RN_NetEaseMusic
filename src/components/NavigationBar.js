@@ -71,9 +71,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   leftImage: {
-    marginLeft: 0,
-    width: 44,
-    height: 44,
+    marginLeft: 4.5,
+    marginTop: 4.5,
+    width: 35,
+    height: 35,
   },
   title: {
     position: 'absolute',
@@ -86,8 +87,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   rightImage: {
-    marginRight: 0,
-    width: 44,
-    height: 44
+    marginTop: 4.5,
+    marginRight: 4.5,
+    width: 35,
+    height: 35
   }
 })

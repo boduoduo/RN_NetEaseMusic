@@ -13,10 +13,6 @@ export default function Banner(props) {
 
   const { banner } = props
 
-  const bannerClicked = (item, index) => {
-    console.log(item.url, index)
-  }
-
   return (
     <View style={styles.container}>
       <Swiper 
@@ -50,7 +46,7 @@ export default function Banner(props) {
                 <TouchableOpacity 
                   style={styles.image} 
                   onPress={() => {
-                    Alert.alert(item.url, index)
+                    props.bannerClicked(item)
                   }}>
                   <Image style={styles.image} source={{ uri: item.pic }}/>
                 </TouchableOpacity>

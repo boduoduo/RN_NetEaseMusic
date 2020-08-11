@@ -12,14 +12,14 @@ import PropTypes from 'prop-types'
 
 export default function Personalized(props) {
 
-  const { title, list } = props
+  const { title, list, type } = props
 
   const renderRow = ({item, index}) => {
     const { name, picUrl } = item
     return (
       <View style={styles.renderItem}>
         <TouchableOpacity style={styles.renderBtn} onPress={()=>{
-          props.itemClicked(item)
+          props.itemClicked({...item, sourceType: type })
         }}>
           <Image style={styles.image} source={{ uri: picUrl }} defaultSource={require('../images/loading.png')}></Image>
           <Text style={styles.desc} numberOfLines={2}>{ name }</Text>
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 0,
     width: Dimensions.width,
+    backgroundColor: '#fff'
   },
   title: {
     marginTop: 10,

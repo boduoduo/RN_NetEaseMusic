@@ -14,6 +14,10 @@ export default function RootHome(props) {
     props.navigation.navigate("detail", params)
   }
 
+  const gotoPlayDetail = (params) => {
+    props.navigation.navigate("playerDetail", params)
+  }
+
   return (
     <View style={styles.container}>
       <NavigationBar/>
@@ -24,16 +28,16 @@ export default function RootHome(props) {
         tabBarUnderlineStyle={{ backgroundColor: '#d43c33', height: 2 }}
         initialPage={0} // 默认定位到哪个Tab
         renderTabBar={()=><ScrollableTabBar style={{
-            height: 44,
-            borderWidth:0,
-            elevation:2,
-          }}
-          tabStyle={{height: 43, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}/>}
-        >
-          <Recommend tabLabel='推荐' gotoDetail={gotoDetail}/>
-          <Singer tabLabel='歌手'/>
-          <Rank tabLabel='排行'/>
-          <Search tabLabel='搜索'/>
+          height: 44,
+          borderWidth:0,
+          elevation:2,
+        }}
+        tabStyle={{height: 43, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}/>}
+      >
+        <Recommend tabLabel='推荐' gotoDetail={gotoDetail} gotoPlayDetail={gotoPlayDetail}/>
+        <Singer tabLabel='歌手'/>
+        <Rank tabLabel='排行'/>
+        <Search tabLabel='搜索'/>
       </ScrollableTabView>
     </View>
   )
