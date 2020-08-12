@@ -64,9 +64,7 @@ export default function Recommend(props) {
         setSongs(list)
       }
     })
-    return () => {
-      
-    }
+    return () => {}
   }, [])
 
   const personalizeClicked = (item) => {

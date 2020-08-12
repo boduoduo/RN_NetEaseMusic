@@ -36,9 +36,7 @@ export default function Detail(props) {
       getSubAlbumDetail()
     }
     
-    return () => {
-      
-    }
+    return () => {}
   }, [])
 
   // 获取歌单详情
