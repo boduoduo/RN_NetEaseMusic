@@ -8,6 +8,7 @@ import {
  } from 'react-native'
 
 import Swiper from 'react-native-swiper'
+import * as Animatable from 'react-native-animatable'
 
 export default function PlayerMiddle() {
 
@@ -48,11 +49,22 @@ export default function PlayerMiddle() {
     lyricList.current.scrollToIndex({ viewPosition: 0.5, index: index })
   }
 
+  const rotate = {
+    from: {
+      opacity: 0
+    },
+    to: {
+      opacity: 1
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Swiper style={styles.wrapper} loop={false}>
         <View style={styles.slide1}>
-          <Image style={styles.poster} source={{ uri: 'https://p1.music.126.net/JOJvZc_7SqQjKf8TktQ_bw==/29686813951246.jpg' }}/>
+          <Animatable.View animation={rotate} duration={2}>
+            <Image style={styles.poster} source={{ uri: 'https://p1.music.126.net/JOJvZc_7SqQjKf8TktQ_bw==/29686813951246.jpg' }}/>
+          </Animatable.View>
           <Text style={styles.songDesc}>作词：黄家驹</Text>
         </View>
         <View style={styles.slide2}>
