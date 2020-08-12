@@ -24,11 +24,21 @@ export default function PlayerBottom(props) {
   
   const formartDuration = useMemo(() => {
     let { minute, second } = formartTime(duration)
+    console.log(minute, second)
     return minute + ':' + second
   }, [duration])
   const formartCurrentTime = useMemo(() => {
     let { minute, second } = formartTime(currentTime)
-    return minute + ':' + second
+    let progress = 0
+    if (duration === 0) {
+      progress = 0
+    } else {
+      progress = currentTime / duration
+    }
+    return {
+      time: minute + ':' + second,
+      progress
+    }
   }, [currentTime])
 
   useEffect(() => {
@@ -67,7 +77,7 @@ export default function PlayerBottom(props) {
     <View style={styles.container}>
       {/* 进度条 */}
       <View style={styles.progressBar}>
-        <Text style={styles.time}>{formartCurrentTime}</Text>
+        <Text style={styles.time}>{formartCurrentTime.time}</Text>
         <Slider
           style={ styles.slide } 
           minimumTrackTintColor="#fff" 
@@ -76,7 +86,7 @@ export default function PlayerBottom(props) {
           thumbStyle={{ width: 10, height: 10 }}
           minimumValue={0}
           maximumValue={1}
-          value={0.3}
+          value={formartCurrentTime.progress}
         />
         <Text style={styles.time}>{formartDuration}</Text>
       </View>

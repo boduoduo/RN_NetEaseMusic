@@ -5,8 +5,8 @@ import {
   StyleSheet,
   Dimensions
  } from 'react-native'
-// import { BlurView } from 'react-native-blur'
-// import Video from 'react-native-video'
+import { BlurView } from 'react-native-blur'
+import Video from 'react-native-video'
 import { getSongDetail } from '../../js/api/index'
 
  import PlayerHeader from './PlayerHeader'
@@ -18,12 +18,12 @@ export default function PlayerDetail(props) {
   const [picUrl, setPicUrl] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
   // 音频总时长
-  const [duration, setDuration] = useState(180)
+  const [duration, setDuration] = useState(0)
   // 当前播放时间
   const [currentTime, setCurrentTime] = useState(0)
   const video = useRef(null)
   const { width, height } = Dimensions.get('window')
-  const songURL = 'http://m8.music.126.net/20200812155709/cfcea20d2487bd2cefff0aae16406b73/ymusic/900c/c2c8/2c61/98f3b38b4accaa32ccc9f7cf149bc067.mp3'
+  const songURL = 'http://m7.music.126.net/20200812210457/4db29a430492b96a1b47bdd90f2f654a/ymusic/e7c5/84f9/897e/a897fda63f7e9f788eac7abbc0bf8602.mp3'
 
   useEffect(() => {
     getSongDetail({ids: '28949444'}).then((res)=>{
@@ -48,8 +48,10 @@ export default function PlayerDetail(props) {
   }
 
   const onProgress = (e) => {
-    console.log(e)
+    // 当前播放时间点
     setCurrentTime(e.currentTime)
+    // 总时长
+    setDuration(e.playableDuration)
   }
 
   return (
@@ -59,12 +61,12 @@ export default function PlayerDetail(props) {
         source={{ uri: picUrl }}
         defaultSource={require('../../images/loading.png')}
       />
-      {/* <BlurView
+      <BlurView
         style={styles.bgImage}
         blurType="light"
         blurAmount={10}
         reducedTransparencyFallbackColor="white"
-      /> */}
+      />
       <PlayerHeader back={back} />
       <View style={styles.content}>
         <PlayerMiddle/>
@@ -76,7 +78,7 @@ export default function PlayerDetail(props) {
           playClicked={()=>(setIsPlaying(!isPlaying))}
         />
       </View>
-      {/* <Video
+      <Video
         ref={video}
         source={{ uri: songURL }}
         paused={!isPlaying}							
@@ -86,7 +88,7 @@ export default function PlayerDetail(props) {
         playInBackground={true}
         onProgress={onProgress}
         playWhenInactive={true}
-      /> */}
+      />
     </View>
   )
 }
