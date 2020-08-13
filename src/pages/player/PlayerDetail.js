@@ -13,7 +13,7 @@ import { getSongDetail } from '../../js/api/index'
  import PlayerBottom from './PlayerBottom'
  import PlayerMiddle from './PlayerMiddle'
 
-export default function PlayerDetail(props) {
+ export default  function PlayerDetail(props) {
 
   const [picUrl, setPicUrl] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -23,7 +23,7 @@ export default function PlayerDetail(props) {
   const [currentTime, setCurrentTime] = useState(0)
   const video = useRef(null)
   const { width, height } = Dimensions.get('window')
-  const songURL = 'http://m7.music.126.net/20200812210457/4db29a430492b96a1b47bdd90f2f654a/ymusic/e7c5/84f9/897e/a897fda63f7e9f788eac7abbc0bf8602.mp3'
+  const songURL = 'http://m7.music.126.net/20200813161913/241f7f808674e618a2579ebcba010755/ymusic/900c/c2c8/2c61/98f3b38b4accaa32ccc9f7cf149bc067.mp3'
 
   useEffect(() => {
     getSongDetail({ids: '28949444'}).then((res)=>{
@@ -32,7 +32,11 @@ export default function PlayerDetail(props) {
         setPicUrl(song.al.picUrl)
       }
     })
-    return () => {}
+    return () => {
+      // 页面销毁
+      console.log('dealloc')
+      setIsPlaying(false)
+    }
   }, [])
 
   const back = () => {
@@ -45,8 +49,14 @@ export default function PlayerDetail(props) {
 
   const onEnd = () => {
     console.log('play end')
+    // 播放结束后，如果是单曲循环则重新播放
+    if (video) {
+      video.current.seek(0)
+    }
   }
-
+  const onError = (error) => {
+    console.log(error)
+  }
   const onProgress = (e) => {
     // 当前播放时间点
     setCurrentTime(e.currentTime)
@@ -54,30 +64,43 @@ export default function PlayerDetail(props) {
     setDuration(e.playableDuration)
   }
 
+  const slideValueChanged = (value) => {
+    let changedTime = duration * value
+    setCurrentTime(changedTime)
+    if (video) {
+      video.current.seek(changedTime)
+    }
+    console.log(value)
+  }
+
   return (
     <View style={styles.container}>
+      {/* 背景图 */}
       <Image
         style={{...styles.bgImage, width: width, height: height}}
         source={{ uri: picUrl }}
         defaultSource={require('../../images/loading.png')}
       />
+      {/* 毛玻璃 */}
       <BlurView
-        style={styles.bgImage}
+        style={{ width: width, height: height, position: 'absolute' }}
         blurType="light"
         blurAmount={10}
-        reducedTransparencyFallbackColor="white"
+        reducedTransparencyFallbackColor="#fff"
       />
       <PlayerHeader back={back} />
       <View style={styles.content}>
-        <PlayerMiddle/>
+        <PlayerMiddle rotateImage={picUrl} isPlaying={isPlaying} />
         {/* 播放控制+进度条 */}
         <PlayerBottom 
           currentTime={currentTime}
           duration={duration}
           isPlaying={isPlaying}
           playClicked={()=>(setIsPlaying(!isPlaying))}
+          slideValueChanged={slideValueChanged}
         />
       </View>
+      {/* 音乐播放器 */}
       <Video
         ref={video}
         source={{ uri: songURL }}
@@ -88,6 +111,7 @@ export default function PlayerDetail(props) {
         playInBackground={true}
         onProgress={onProgress}
         playWhenInactive={true}
+        onError={onError}
       />
     </View>
   )
@@ -102,10 +126,27 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flex: 1,
     backgroundColor: '#000',
-    // opacity: 0.6
   },
   content: {
     flex: 1,
     position: 'relative'
   }
 })
+
+// let instance = null
+
+// class Player {
+//   constructor() {
+//     if (instance === null) {
+//       instance = PlayerDetail()
+//     }
+//     return instance
+//   }
+
+//   static shareInstance() {
+//     let instance = new Player()
+//     return instance
+//   }
+// }
+
+// export default Player.shareInstance()

@@ -10,10 +10,12 @@ import {
 import Swiper from 'react-native-swiper'
 import * as Animatable from 'react-native-animatable'
 
-export default function PlayerMiddle() {
+export default function PlayerMiddle(props) {
 
+  const { rotateImage, isPlaying } = props
   const [currentIdx, setCurrentIdx] = useState(0)
   const lyricList = useRef(null)
+  const animateImage = useRef(null)
 
   const [list, setList] = useState([
     { id: 1, lyric: '麦克奎格软件感染' },
@@ -44,27 +46,45 @@ export default function PlayerMiddle() {
     { id: 131, lyric: '麦克奎格软件感染感染' },
   ])
 
+  const rotate = {
+    from: {
+      rotate: '0deg',
+    },
+    to: {
+      rotate: '360deg',
+    }
+  }
+
   const itemClicked = (item, index) => {
     setCurrentIdx(index)
     lyricList.current.scrollToIndex({ viewPosition: 0.5, index: index })
   }
 
-  const rotate = {
-    from: {
-      opacity: 0
-    },
-    to: {
-      opacity: 1
+  useEffect(() => {
+    if (isPlaying) {
+      animateImage.current.animate(rotate)
+    } else {
+      animateImage.current.stopAnimation()
     }
-  }
+    return () => {}
+  }, [isPlaying])
 
   return (
     <View style={styles.container}>
       <Swiper style={styles.wrapper} loop={false}>
         <View style={styles.slide1}>
-          <Animatable.View animation={rotate} duration={2}>
-            <Image style={styles.poster} source={{ uri: 'https://p1.music.126.net/JOJvZc_7SqQjKf8TktQ_bw==/29686813951246.jpg' }}/>
-          </Animatable.View>
+          <Animatable.Image
+            ref={animateImage}
+            animation={rotate}
+            delay={1000}
+            duration={8000}
+            direction="normal"
+            iterationCount="infinite"
+            easing="linear"
+            useNativeDriver
+            style={styles.poster}
+            source={{ uri: rotateImage }}
+            />
           <Text style={styles.songDesc}>作词：黄家驹</Text>
         </View>
         <View style={styles.slide2}>
@@ -76,12 +96,11 @@ export default function PlayerMiddle() {
             renderItem={({item, index})=>{
               return (
                 <Text 
-                  onPress={()=>{
-                    itemClicked(item, index)
-                  }}
-                  style={{...styles.lyric, 
+                  onPress={()=>(itemClicked(item, index))}
+                  style={{
+                    ...styles.lyric, 
                     color: index === currentIdx ? '#fff':'#666', 
-                    marginBottom: index === list.length-1 ? 250:10 }}
+                    paddingBottom: index === list.length-1 ? 250:10 }}
                   >{item.lyric}
                 </Text>
               )

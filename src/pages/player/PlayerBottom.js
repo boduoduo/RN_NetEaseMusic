@@ -73,6 +73,10 @@ export default function PlayerBottom(props) {
     }
   }
 
+  const valueChanged = (value) => {
+    props.slideValueChanged(value)
+  }
+
   return (
     <View style={styles.container}>
       {/* 进度条 */}
@@ -87,6 +91,7 @@ export default function PlayerBottom(props) {
           minimumValue={0}
           maximumValue={1}
           value={formartCurrentTime.progress}
+          onValueChange={valueChanged}
         />
         <Text style={styles.time}>{formartDuration}</Text>
       </View>
