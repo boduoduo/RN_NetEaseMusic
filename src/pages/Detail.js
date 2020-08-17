@@ -98,7 +98,7 @@ export default function Detail(props) {
             </TouchableOpacity>
           )
         }}
-        keyExtractor={(item)=>item.id}
+        keyExtractor={(item)=>item.id.toString()}
         ItemSeparatorComponent={()=><View style={styles.separator}></View>}
         ListHeaderComponent={header}
         ListHeaderComponentStyle={{ position: 'relative', width: width, height: width }}

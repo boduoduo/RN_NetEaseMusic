@@ -7,7 +7,7 @@ import {
  } from 'react-native'
 import { BlurView } from 'react-native-blur'
 import Video from 'react-native-video'
-import { getSongDetail } from '../../js/api/index'
+import { getSongDetail, getSongURL } from '../../js/api/index'
 
  import PlayerHeader from './PlayerHeader'
  import PlayerBottom from './PlayerBottom'
@@ -23,13 +23,26 @@ import { getSongDetail } from '../../js/api/index'
   const [currentTime, setCurrentTime] = useState(0)
   const video = useRef(null)
   const { width, height } = Dimensions.get('window')
-  const songURL = 'http://m7.music.126.net/20200813161913/241f7f808674e618a2579ebcba010755/ymusic/900c/c2c8/2c61/98f3b38b4accaa32ccc9f7cf149bc067.mp3'
+  const [songURL, setSongURL] = useState(null)
+  const [ids, setIds] = useState('1398447330')
 
   useEffect(() => {
-    getSongDetail({ids: '28949444'}).then((res)=>{
+    getSongDetail({ids: ids}).then((res)=>{
       if (res.code === 200) {
         const song = res.songs[0]
         setPicUrl(song.al.picUrl)
+      }
+    })
+    getSongURL({id: ids}).then((res)=>{
+      if (res.code === 200) {
+        for (let j = 0; j < res.data.length; j++) {
+          const item = res.data[j]
+          if (item.id == ids) {
+              // obj.url = item.url
+              setSongURL(item.url)
+              break;
+          }
+      }
       }
     })
     return () => {
@@ -70,7 +83,6 @@ import { getSongDetail } from '../../js/api/index'
     if (video) {
       video.current.seek(changedTime)
     }
-    console.log(value)
   }
 
   return (
