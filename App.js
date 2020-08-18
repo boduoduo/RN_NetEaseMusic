@@ -8,6 +8,7 @@ import { createAppContainer } from 'react-navigation'
 import RootHome from './src/pages/RootHome'
 import Detail from './src/pages/Detail'
 import PlayerDetail from './src/pages/player/PlayerDetail'
+import { Player } from './src/store/store'
 
 const AppNavigator = createStackNavigator(
   {
@@ -27,7 +28,11 @@ const AppNavigator = createStackNavigator(
 const AppContainer = createAppContainer(AppNavigator)
 
 const App = () => {
-  return <AppContainer/>
+  return (
+    <Player>
+      <AppContainer/>
+    </Player>
+  )
 }
 
 export default App;

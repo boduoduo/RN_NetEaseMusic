@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useContext } from 'react'
 import { 
   View, 
   Image,
@@ -10,15 +10,19 @@ import {
 import Slider from 'react-native-slider'
 import { formartTime } from '../../js/utils/utils'
 import mode from '../../store/mode'
+import { PlayerContext } from '../../store/store'
+import { SET_MODE_TYPE } from '../../store/actionTypes'
 
 export default function PlayerBottom(props) {
+  const { state, dispatch } = useContext(PlayerContext)
+  // 播放模式
+  const { playMode } = state
+
   const { currentTime, duration, isPlaying } = props
   const [playIcon, setPlayIcon] = useState(require('../../images/pause_163.png'))
   // 喜欢状态
   const [favoriteStatus, setFavoriteStatus] = useState(false)
   const [favoriteImage, setFavoriteImage] = useState(require('../../images/un_favorite_163.png'))
-  // 播放模式
-  const [playMode, setPlayMode] = useState(mode.loop)
   // 模式图片
   const [modeIcon, setModeIcon] = useState(require('../../images/loop_163.png'))
   
@@ -64,13 +68,15 @@ export default function PlayerBottom(props) {
 
   // 切换播放模式
   const modeChange = () => {
+    let play_mode = mode.loop
     if (playMode === mode.loop) {
-      setPlayMode(mode.one)
+      play_mode = mode.one
     } else if (playMode === mode.one) {
-      setPlayMode(mode.random)
+      play_mode = mode.random
     } else if (playMode === mode.random) {
-      setPlayMode(mode.loop)
+      play_mode = mode.loop
     }
+    dispatch({type: SET_MODE_TYPE, mode: play_mode})
   }
 
   const valueChanged = (value) => {
@@ -102,7 +108,7 @@ export default function PlayerBottom(props) {
           <Image style={styles.item} source={modeIcon}/>
         </TouchableOpacity>
         {/* 上一首 */}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>(console.log('pre song'))}>
           <Image style={styles.item} source={require('../../images/prev_163.png')}/>
         </TouchableOpacity>
         {/* 播放/暂停 */}

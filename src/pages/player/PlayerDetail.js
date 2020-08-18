@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { 
   View,
   Image,
@@ -8,12 +8,15 @@ import {
 import { BlurView } from 'react-native-blur'
 import Video from 'react-native-video'
 import { getSongDetail, getSongURL } from '../../js/api/index'
+import { PlayerContext } from '../../store/store'
 
- import PlayerHeader from './PlayerHeader'
- import PlayerBottom from './PlayerBottom'
- import PlayerMiddle from './PlayerMiddle'
+import PlayerHeader from './PlayerHeader'
+import PlayerBottom from './PlayerBottom'
+import PlayerMiddle from './PlayerMiddle'
+import { SET_IS_PLAYING } from '../../store/actionTypes'
 
  export default  function PlayerDetail(props) {
+  const { state, dispatch } = useContext(PlayerContext)
 
   const [picUrl, setPicUrl] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -108,23 +111,28 @@ import { getSongDetail, getSongURL } from '../../js/api/index'
           currentTime={currentTime}
           duration={duration}
           isPlaying={isPlaying}
-          playClicked={()=>(setIsPlaying(!isPlaying))}
+          playClicked={()=>{
+            dispatch({type: SET_IS_PLAYING, isPlaying: !isPlaying})
+            setIsPlaying(!isPlaying)
+          }}
           slideValueChanged={slideValueChanged}
         />
       </View>
       {/* 音乐播放器 */}
-      <Video
-        ref={video}
-        source={{ uri: songURL }}
-        paused={!isPlaying}							
-        onLoad={onLoad}			
-        volume={1.0}
-        onEnd={onEnd}
-        playInBackground={true}
-        onProgress={onProgress}
-        playWhenInactive={true}
-        onError={onError}
-      />
+      {
+        songURL ? <Video
+                    ref={video}
+                    source={{ uri: songURL }}
+                    paused={!isPlaying}							
+                    onLoad={onLoad}			
+                    volume={1.0}
+                    onEnd={onEnd}
+                    playInBackground={true}
+                    onProgress={onProgress}
+                    playWhenInactive={true}
+                    onError={onError}
+                  /> : null
+      }
     </View>
   )
 }

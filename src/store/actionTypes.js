@@ -1,0 +1,2 @@
+export const SET_MODE_TYPE = 'SET_MODE_TYPE'
+export const SET_IS_PLAYING = 'SET_IS_PLAYING'
