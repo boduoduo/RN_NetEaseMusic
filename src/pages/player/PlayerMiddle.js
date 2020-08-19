@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { 
   Text,
   View,
@@ -9,56 +9,34 @@ import {
 
 import Swiper from 'react-native-swiper'
 import * as Animatable from 'react-native-animatable'
+import { PlayerContext } from '../../store/store'
 
 export default function PlayerMiddle(props) {
-
-  const { rotateImage, isPlaying } = props
+  const { state, dispatch } = useContext(PlayerContext)
+  const { songLyric } = state
+  const { rotateImage, isPlaying, currentTime } = props
   const [currentIdx, setCurrentIdx] = useState(0)
   const lyricList = useRef(null)
   const animateImage = useRef(null)
+  // 第一句歌词
+  const [songDesc, setSongDesc] = useState(null)
+  // 歌词列表
+  const [list, setList] = useState([])
 
-  const [list, setList] = useState([
-    { id: 1, lyric: '麦克奎格软件感染' },
-    { id: 2, lyric: '麦克奎格软件感染感染可容纳抗感染感染' },
-    { id: 3, lyric: '麦克奎格软件感染感染可容纳抗感染感染' },
-    { id: 4, lyric: '麦克奎格软件感染感染可容纳抗感染感染' },
-    { id: 5, lyric: '麦克奎格软件感染感染可容纳抗感染感染' },
-    { id: 6, lyric: '麦克奎格软件感' },
-    { id: 7, lyric: '麦克奎格软件感染感染可容纳抗感染感染' },
-    { id: 8, lyric: '麦克奎格软件感染感染可' },
-    { id: 9, lyric: '麦克奎格软件感染感染可容纳抗感染感染' },
-    { id: 10, lyric: '麦克奎' },
-    { id: 11, lyric: '麦克奎格软件感染感染可容纳抗感' },
-    { id: 12, lyric: '麦克奎格软件感染感染可容纳抗感染感染' },
-    { id: 13, lyric: '麦克奎格软件感染感染' },
-    { id: 14, lyric: '麦克奎格软件感染感染可容纳抗感染感染' },
-    { id: 25, lyric: '麦克奎格软件感染感染染' },
-    { id: 36, lyric: '麦克奎格软件感染感染可容感染' },
-    { id: 41, lyric: '麦克奎格软件感染感染可容' },
-    { id: 51, lyric: '麦克奎格软件' },
-    { id: 61, lyric: '麦克奎格软件感染感染可容纳抗感染感染' },
-    { id: 71, lyric: '麦克奎格软件感染感染可容纳抗' },
-    { id: 81, lyric: '麦克奎格软件' },
-    { id: 91, lyric: '麦克奎格软件感染感染可容纳抗感染感染' },
-    { id: 101, lyric: '麦克奎格软件感染感染可容纳染' },
-    { id: 111, lyric: '麦克奎格软件感染感染可容纳抗感染感' },
-    { id: 121, lyric: '麦克奎格软件感染感染可' },
-    { id: 131, lyric: '麦克奎格软件感染感染' },
-  ])
-
-  const rotate = {
-    from: {
-      rotate: '0deg',
-    },
-    to: {
-      rotate: '360deg',
+  useEffect(() => {
+    let lyrics = []
+    for (const key in songLyric) {
+      if (songLyric[key]) {
+        lyrics.push({ id: key, key, lyric: songLyric[key]})
+      }
     }
-  }
-
-  const itemClicked = (item, index) => {
-    setCurrentIdx(index)
-    lyricList.current.scrollToIndex({ viewPosition: 0.5, index: index })
-  }
+    // 第一句歌词
+    if (lyrics.length > 0) {
+      setSongDesc(lyrics[0].lyric || '')
+    }
+    setList(lyrics)
+    return () => {}
+  }, [songLyric])
 
   useEffect(() => {
     if (isPlaying) {
@@ -68,6 +46,38 @@ export default function PlayerMiddle(props) {
     }
     return () => {}
   }, [isPlaying])
+
+  // 歌词滚动同步
+  useEffect(() => {
+    if (list.length < 0) {
+      return
+    }
+    for (let index = list.length-1; index >= 0; index--) {
+      let time = parseFloat(list[index].key)
+      if (time < currentTime) {
+        setCurrentIdx(index)
+        break
+      }
+    }
+    return () => {}
+  }, [currentTime])
+
+  useEffect(() => {
+    if (lyricList && list.length > 0) {
+      setSongDesc(list[currentIdx].lyric || '')
+      lyricList.current.scrollToIndex({ viewPosition: 0.5, index: currentIdx })
+    }
+    return () => {}
+  }, [currentIdx])
+
+  const rotate = {
+    from: {
+      rotate: '0deg',
+    },
+    to: {
+      rotate: '360deg',
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -85,27 +95,31 @@ export default function PlayerMiddle(props) {
             style={styles.poster}
             source={{ uri: rotateImage }}
             />
-          <Text style={styles.songDesc}>作词：黄家驹</Text>
+          <Text style={styles.songDesc}>{ songDesc }</Text>
         </View>
         <View style={styles.slide2}>
-          <FlatList
-            ref={lyricList}
-            data={list}
-            style={{ paddingLeft: 30, paddingRight: 30 }}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item, index})=>{
-              return (
-                <Text 
-                  onPress={()=>(itemClicked(item, index))}
-                  style={{
-                    ...styles.lyric, 
-                    color: index === currentIdx ? '#fff':'#666', 
-                    paddingBottom: index === list.length-1 ? 250:10 }}
-                  >{item.lyric}
-                </Text>
-              )
-            }}
-          />
+          {
+            list.length > 0 ?
+            <FlatList
+              ref={lyricList}
+              data={list}
+              style={{ paddingLeft: 30, paddingRight: 30 }}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item, index})=>{
+                return (
+                  <Text
+                    style={{
+                      ...styles.lyric, 
+                      color: index === currentIdx ? '#fff':'#666', 
+                      paddingBottom: index === list.length-1 ? 250:10 }}
+                    >{item.lyric}
+                  </Text>
+                )
+              }}
+            />
+            :
+            <Text style={styles.noLyric}>该歌曲暂无歌词</Text>
+          }
         </View>
       </Swiper>
     </View>
@@ -142,6 +156,8 @@ const styles = StyleSheet.create({
   },
   songDesc: {
     marginTop: 30,
+    marginLeft: 20,
+    marginRight: 20,
     color: '#fff',
     fontSize: 17,
   },
@@ -152,5 +168,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     height: 16,
     textAlign: "center"
+  },
+  noLyric: {
+    color: '#fff',
+    fontSize: 18
   }
 })

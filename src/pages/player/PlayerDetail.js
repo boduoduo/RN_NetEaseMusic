@@ -7,18 +7,25 @@ import {
  } from 'react-native'
 import { BlurView } from 'react-native-blur'
 import Video from 'react-native-video'
-import { getSongDetail, getSongURL } from '../../js/api/index'
+import { getSongDetail, getSongURL, getSongLyric } from '../../js/api/index'
 import { PlayerContext } from '../../store/store'
 
 import PlayerHeader from './PlayerHeader'
 import PlayerBottom from './PlayerBottom'
 import PlayerMiddle from './PlayerMiddle'
-import { SET_IS_PLAYING } from '../../store/actionTypes'
+import { SET_IS_PLAYING, SET_SONG_LYRIC } from '../../store/actionTypes'
 
  export default  function PlayerDetail(props) {
+
+  const params = props.navigation.state.params
+  const { id } = params
+
   const { state, dispatch } = useContext(PlayerContext)
 
   const [picUrl, setPicUrl] = useState(null)
+  const [songName, setSongName] = useState(null)
+  const [singer, setSinger] = useState(null)
+
   const [isPlaying, setIsPlaying] = useState(false)
   // 音频总时长
   const [duration, setDuration] = useState(0)
@@ -27,15 +34,28 @@ import { SET_IS_PLAYING } from '../../store/actionTypes'
   const video = useRef(null)
   const { width, height } = Dimensions.get('window')
   const [songURL, setSongURL] = useState(null)
-  const [ids, setIds] = useState('1398447330')
+  const [ids, setIds] = useState(id)
 
   useEffect(() => {
+    // 获取歌曲图片
     getSongDetail({ids: ids}).then((res)=>{
       if (res.code === 200) {
         const song = res.songs[0]
+        setSongName(song.name)
         setPicUrl(song.al.picUrl)
+        let singer = ''
+        song['ar'].forEach((item, index) => {
+          if (index == 0) {
+            singer = item.name
+          }else {
+            singer += '-' + item.name
+          }
+        })
+        // obj.singer = singer
+        setSinger(singer)
       }
     })
+    // 获取歌曲播放URL
     getSongURL({id: ids}).then((res)=>{
       if (res.code === 200) {
         for (let j = 0; j < res.data.length; j++) {
@@ -45,7 +65,15 @@ import { SET_IS_PLAYING } from '../../store/actionTypes'
               setSongURL(item.url)
               break;
           }
+        }
       }
+    })
+    // 获取歌词
+    getSongLyric({ id: ids }).then((res)=>{
+      if (res.code === 200) {
+        dispatch({ type: SET_SONG_LYRIC, result: res})
+      } else {
+        dispatch({ type: SET_SONG_LYRIC, result: null})
       }
     })
     return () => {
@@ -60,7 +88,8 @@ import { SET_IS_PLAYING } from '../../store/actionTypes'
   }
 
   const onLoad = (data) => {
-    console.log('on load')
+    console.log('on load', data)
+    setDuration(data.duration || 0)
   }
 
   const onEnd = () => {
@@ -77,7 +106,7 @@ import { SET_IS_PLAYING } from '../../store/actionTypes'
     // 当前播放时间点
     setCurrentTime(e.currentTime)
     // 总时长
-    setDuration(e.playableDuration)
+    // setDuration(e.playableDuration)
   }
 
   const slideValueChanged = (value) => {
@@ -99,15 +128,15 @@ import { SET_IS_PLAYING } from '../../store/actionTypes'
       {/* 毛玻璃 */}
       <BlurView
         style={{ width: width, height: height, position: 'absolute' }}
-        blurType="light"
+        blurType="dark"
         blurAmount={10}
         reducedTransparencyFallbackColor="#fff"
       />
-      <PlayerHeader back={back} />
+      <PlayerHeader back={back} songName={songName} singer={singer}/>
       <View style={styles.content}>
-        <PlayerMiddle rotateImage={picUrl} isPlaying={isPlaying} />
+        <PlayerMiddle rotateImage={picUrl} isPlaying={isPlaying} currentTime={currentTime} />
         {/* 播放控制+进度条 */}
-        <PlayerBottom 
+        <PlayerBottom
           currentTime={currentTime}
           duration={duration}
           isPlaying={isPlaying}
@@ -120,18 +149,21 @@ import { SET_IS_PLAYING } from '../../store/actionTypes'
       </View>
       {/* 音乐播放器 */}
       {
-        songURL ? <Video
-                    ref={video}
-                    source={{ uri: songURL }}
-                    paused={!isPlaying}							
-                    onLoad={onLoad}			
-                    volume={1.0}
-                    onEnd={onEnd}
-                    playInBackground={true}
-                    onProgress={onProgress}
-                    playWhenInactive={true}
-                    onError={onError}
-                  /> : null
+        songURL ? 
+        <Video
+          ref={video}
+          source={{ uri: songURL }}
+          paused={!isPlaying}							
+          onLoad={onLoad}			
+          volume={1.0}
+          onEnd={onEnd}
+          playInBackground={true}
+          onProgress={onProgress}
+          playWhenInactive={true}
+          onError={onError}
+        /> 
+        :
+        null
       }
     </View>
   )

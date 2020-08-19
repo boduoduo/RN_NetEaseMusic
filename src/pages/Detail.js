@@ -92,7 +92,9 @@ export default function Detail(props) {
         data={playlist}
         renderItem={({item})=>{
           return (
-            <TouchableOpacity style={styles.renderItem}>
+            <TouchableOpacity style={styles.renderItem} onPress={()=>{
+              props.navigation.navigate("playerDetail", item)
+            }}>
               <Text style={styles.title} numberOfLines={1}>{item.name}</Text>
               <Text style={styles.desc} numberOfLines={1}>{item.al.name}--{item.ar[0].name}</Text>
             </TouchableOpacity>

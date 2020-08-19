@@ -8,6 +8,8 @@ import {
  } from 'react-native'
 
 export default function PlayerHeader(props) {
+  const { songName, singer } = props
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={()=>{
@@ -16,8 +18,8 @@ export default function PlayerHeader(props) {
         <Image source={require('../../images/down_163.png')} style={styles.closeImage} />
       </TouchableOpacity>
       <View style={styles.titleView}>
-        <Text style={styles.songName}>烟火里的尘埃</Text>
-        <Text style={styles.singer}>化成雨</Text>
+        <Text style={styles.songName} numberOfLines={1}>{ songName }</Text>
+        <Text style={styles.singer} numberOfLines={1}>{ singer }</Text>
       </View>
       <View style={styles.right}></View>
     </View>
@@ -39,6 +41,7 @@ const styles = StyleSheet.create({
     height: 35,
   },
   titleView: {
+    flex: 1,
     fontSize: 18,
     height: 44,
     lineHeight: 44,
