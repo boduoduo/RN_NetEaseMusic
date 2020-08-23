@@ -5,22 +5,26 @@ import {
   TextInput,
   Image,
   StyleSheet 
-} from 'react-native';
+} from 'react-native'
+import HotSearch from './search/HotSearch'
+import SearchSuggestion from './search/SearchSuggestion'
+import SearchHistory from './search/SearchHistory'
 
 export default function Search() {
-
-  const searchIcon = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNiAyNiI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBmaWxsPSIjYzljOWNhIiBkPSJNMjUuMTgxIDIzLjUzNWwtMS40MTQgMS40MTQtNy4zMTUtNy4zMTRBOS45NjYgOS45NjYgMCAwIDEgMTAgMjBDNC40NzcgMjAgMCAxNS41MjMgMCAxMFM0LjQ3NyAwIDEwIDBzMTAgNC40NzcgMTAgMTBjMCAyLjM0Mi0uODExIDQuNDktMi4xNiA2LjE5NWw3LjM0MSA3LjM0ek0xMCAyYTggOCAwIDEgMCAwIDE2IDggOCAwIDAgMCAwLTE2eiIvPjwvc3ZnPg=='
 
   return (
     <View>
       <View style={styles.searchBox}>
-        <Image style={styles.leftImage} source={{ uri:  searchIcon}} onLoad={(e)=>(console.log(e))} onError={(e)=>(console.log(e, 'error'))}/>
+        <Image style={styles.leftImage} source={require('../images/search_icon.png')}/>
         <TextInput 
           style={styles.input}
           placeholder='搜索歌曲、歌手、专题'
           maxLength={100}
         />
       </View>
+      <HotSearch/>
+      {/* <SearchSuggestion/> */}
+      <SearchHistory/>
     </View>
   )
 }
@@ -38,11 +42,12 @@ const styles = StyleSheet.create({
   },
   leftImage: {
     width: 20,
-    height: 20
+    height: 20,
+    marginLeft: 10
   },
   input: {
     flex: 1,
-    marginLeft: 20,
+    marginLeft: 5,
     marginRight: 20,
     height: 40,
   }
