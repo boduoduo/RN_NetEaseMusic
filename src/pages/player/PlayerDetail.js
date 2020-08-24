@@ -9,6 +9,7 @@ import { BlurView } from 'react-native-blur'
 import Video from 'react-native-video'
 import { getSongDetail, getSongURL, getSongLyric } from '../../js/api/index'
 import { PlayerContext } from '../../store/store'
+import { insertFavoriteSong } from '../../js/utils/realm'
 
 import PlayerHeader from './PlayerHeader'
 import PlayerBottom from './PlayerBottom'
@@ -87,6 +88,17 @@ import { SET_IS_PLAYING, SET_SONG_LYRIC } from '../../store/actionTypes'
     props.navigation.pop()
   }
 
+  const favoriteBtnClicked = (flag) => {
+    if (flag) {
+      insertFavoriteSong({
+        id: id,
+        singer: singer,
+        name: songName,
+        picUrl: picUrl
+      })
+    }
+  }
+
   const onLoad = (data) => {
     console.log('on load', data)
     setDuration(data.duration || 0)
@@ -145,6 +157,7 @@ import { SET_IS_PLAYING, SET_SONG_LYRIC } from '../../store/actionTypes'
             setIsPlaying(!isPlaying)
           }}
           slideValueChanged={slideValueChanged}
+          favoriteBtnClicked={favoriteBtnClicked}
         />
       </View>
       {/* 音乐播放器 */}

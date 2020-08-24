@@ -124,6 +124,7 @@ export default function PlayerBottom(props) {
         {/* 喜欢 */}
         <TouchableOpacity onPress={()=>{
           setFavoriteStatus(!favoriteStatus)
+          props.favoriteBtnClicked(!favoriteStatus)
         }}>
           <Image style={styles.item} source={favoriteImage}/>
         </TouchableOpacity>

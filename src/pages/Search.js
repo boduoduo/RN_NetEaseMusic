@@ -9,7 +9,6 @@ import {
 import HotSearch from './search/HotSearch'
 import SearchSuggestion from './search/SearchSuggestion'
 import SearchHistory from './search/SearchHistory'
-import { throttle } from '../js/utils/utils'
 import { getSearchList, getSearchHot } from '../js/api/index'
 
 export default function Search(props) {
