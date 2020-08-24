@@ -22,3 +22,7 @@ export const getSongURL = data => Http.mb_get("/song/url", data);
 export const getArtistsDetail = data => Http.mb_get("/artists", data);
 // 获取榜单详情列表
 export const getTopList = data => Http.mb_get("/top/list", data);
+// 搜索歌曲
+export const getSearchList = data => Http.mb_get("/search?type=1", data);
+// 搜索热门歌曲
+export const getSearchHot = data => Http.mb_get("/search/hot");

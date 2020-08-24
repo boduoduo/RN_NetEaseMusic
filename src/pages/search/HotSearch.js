@@ -6,28 +6,18 @@ import {
   TouchableOpacity
 } from 'react-native'
 
-export default function HotSearch() {
-
-  const [list, setList] = useState([
-    {id: 1, name: '守候'},
-    {id: 2, name: 'Dynamic'},
-    {id: 3, name: '像小强一样活着'},
-    {id: 4, name: '天外来物'},
-    {id: 5, name: 'TFBoys'},
-    {id: 6, name: '爸爸我看见啥'},
-    {id: 7, name: '蔡徐坤'},
-    {id: 8, name: '无滤镜散发哦'},
-  ])
+export default function HotSearch(props) {
+  const { hotSearchs } = props
 
   return (
     <View style={styles.container}>
       <Text style={styles.tip}>热门搜索</Text>
       <View style={styles.songs}>
         {
-          list.map((item, index) => {
+          hotSearchs.map((item, index) => {
             return (
-              <TouchableOpacity key={index}>
-                <Text style={styles.songItem}>{ item.name }</Text>
+              <TouchableOpacity key={index} onPress={()=>(props.hotItemClicked(item))}>
+                <Text style={styles.songItem}>{ item.first }</Text>
               </TouchableOpacity>
             )
           })
@@ -39,6 +29,7 @@ export default function HotSearch() {
 
 const styles = StyleSheet.create({
   container: {
+    // flex: 1,
     // backgroundColor: 'blue'
   },
   tip: {

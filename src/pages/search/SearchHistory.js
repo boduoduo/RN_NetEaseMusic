@@ -18,7 +18,7 @@ export default function SearchHistory() {
   ])
 
   return (
-    <View style={styles.list}>
+    <View style={styles.container}>
       <FlatList
         data={list}
         renderItem={()=>{
@@ -43,7 +43,7 @@ export default function SearchHistory() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   list: {
   },
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   delete: {
     marginRight: 12,
-    width: 25,
-    height: 25
+    width: 30,
+    height: 30
   }
 })

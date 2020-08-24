@@ -20,7 +20,7 @@ export default function RootHome(props) {
 
   return (
     <View style={styles.container}>
-      <NavigationBar/>
+      <NavigationBar {...props}/>
       <ScrollableTabView
         tabBarActiveTextColor="#d43c33" // 选中的文本颜色
         tabBarInactiveTextColor="#666"
@@ -37,7 +37,7 @@ export default function RootHome(props) {
         <Recommend tabLabel='推荐' gotoDetail={gotoDetail} gotoPlayDetail={gotoPlayDetail}/>
         <Singer tabLabel='歌手'/>
         <Rank tabLabel='排行'/>
-        <Search tabLabel='搜索'/>
+        <Search tabLabel='搜索' gotoPlayDetail={gotoPlayDetail}/>
       </ScrollableTabView>
     </View>
   )

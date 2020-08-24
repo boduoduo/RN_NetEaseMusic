@@ -74,7 +74,9 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   right: {
+    flex: 1,
     marginLeft: 15,
+    marginRight: 12,
     display: 'flex',
     justifyContent: 'center'
   },
@@ -82,7 +84,6 @@ const styles = StyleSheet.create({
     color: '#666',
     fontSize: 17,
     fontWeight: 'bold',
-    marginRight: 10
   },
   desc: {
     color: '#666',

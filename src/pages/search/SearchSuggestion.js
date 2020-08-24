@@ -8,29 +8,23 @@ import {
   FlatList
 } from 'react-native'
 
-export default function SearchSuggestion() {
-  const [list, setList] = useState([
-    {id: 1, name: '能丰非i违法i为和服饿哦饿'},
-    {id: 2, name: '能丰非i违法i为和服饿哦饿'},
-    {id: 3, name: '能丰非i违法i为和服饿哦饿'},
-    {id: 4, name: '能丰非i违法i为和服饿哦饿'},
-    {id: 5, name: '能丰非i违法i为和服饿哦饿'}
-  ])
+export default function SearchSuggestion(props) {
+  const { suggestions } = props
 
   return (
     <View style={styles.container}>
       <FlatList
         style={styles.list}
-        data={list}
+        data={suggestions}
         keyExtractor={(item)=>item.id}
         renderItem={({item})=>{
           return (
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity style={styles.item} onPress={()=>(props.suggestionClicked(item))}>
               <Image 
                 style={styles.searchIcon} 
                 source={require('../../images/search_icon.png')}
               />
-              <Text style={styles.desc}>{item.name}</Text>
+              <Text style={styles.desc} numberOfLines={1} >{ item.name } - { item.artists[0].name }</Text>
             </TouchableOpacity>
           )
         }}
@@ -41,6 +35,7 @@ export default function SearchSuggestion() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1
   },
   list: {
     // backgroundColor: 'red'
@@ -59,7 +54,9 @@ const styles = StyleSheet.create({
     height: 20,
   },
   desc: {
+    flex: 1,
     marginLeft: 10,
+    marginRight: 10,
     color: '#666'
   }
 })

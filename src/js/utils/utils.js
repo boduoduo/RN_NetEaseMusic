@@ -51,3 +51,43 @@ export const parseLyric = (lrc) => {
     })
     return lyricObj
 }
+
+/**
+* 防抖函数
+* @param fn 事件触发的操作
+* @param delay 多少毫秒内连续触发事件，不会执行
+* @returns {Function}
+*/
+export const debounce = (fn, delay) => {
+  let timer = null; //借助闭包
+  return function() {
+    let context = this,
+        args = arguments
+    timer && clearTimeout(timer)
+    timer = setTimeout(function() {
+      fn.apply(context, args);
+    }, delay)
+  }
+}
+
+ /**
+* 节流函数
+* @param fn 事件触发的操作
+* @param delay 间隔多少毫秒需要触发一次事件
+*/
+//基本原理
+export const throttle = (fn, delay) => {
+  let valid = true;
+  return function() {
+    let context = this;
+    let args = arguments;
+    if (!valid) {
+      return;
+    }
+    valid = false;
+    setTimeout(() => {
+      fn.apply(context, args);
+      valid = true;
+    }, delay);
+  }
+}

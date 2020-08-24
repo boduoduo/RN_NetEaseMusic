@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import { 
   Text,
   View,
-  Image,
   FlatList,
   StyleSheet
  } from 'react-native'
@@ -162,11 +161,11 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   lyric: {
-    marginTop: 10,
-    marginBottom: 10,
+    marginTop: 5,
+    marginBottom: 5,
     color: '#666',
     fontSize: 15,
-    height: 16,
+    height: 18,
     textAlign: "center"
   },
   noLyric: {

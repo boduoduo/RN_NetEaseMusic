@@ -20,7 +20,7 @@ export default function NavigationBar(props) {
   }
 
   const clickedRightImage = () => {
-    Alert.alert('clicked right image')
+    props.navigation.navigate("account")
   }
 
   let { title } = props

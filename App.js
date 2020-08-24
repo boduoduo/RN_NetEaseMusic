@@ -8,13 +8,15 @@ import { createAppContainer } from 'react-navigation'
 import RootHome from './src/pages/RootHome'
 import Detail from './src/pages/Detail'
 import PlayerDetail from './src/pages/player/PlayerDetail'
+import Account from './src/pages/account/Account'
 import { Player } from './src/store/store'
 
 const AppNavigator = createStackNavigator(
   {
     home: RootHome,
     detail: Detail,
-    playerDetail: PlayerDetail
+    playerDetail: PlayerDetail,
+    account: Account
   },
   {
     initialRouteName: 'home',
