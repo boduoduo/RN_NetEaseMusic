@@ -39,7 +39,6 @@ export default function Search(props) {
     valid = false
     setTimeout(() => {
       getSearchList({ 'keywords': keywords }).then((res)=>{
-        console.log(res)
         if (res.code === 200) {
           setSuggestions((res.result || {}).songs || [])
         }

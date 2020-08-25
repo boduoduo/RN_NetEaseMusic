@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 
 import AccountHeader from './AccountHeader'
-import { queryFavoriteList } from '../../js/utils/realm'
+// import { queryFavoriteList } from '../../js/utils/storage'
 
 export default function Account(props) {
 
@@ -22,8 +22,8 @@ export default function Account(props) {
   ])
 
   useEffect(() => {
-    let list = queryFavoriteList()
-    console.log(list)
+    // let list = queryFavoriteList()
+    // console.log(list, 'list')
     return () => {}
   }, [])
 
@@ -39,13 +39,10 @@ export default function Account(props) {
     <View style={styles.container}>
       <AccountHeader {...props} topBarSelected={topBarSelected}/>
       <View style={styles.playAllBox}>
-        <View style={styles.playAll}>
-          <Image 
-            style={styles.playIcon} 
-            source={require('../../images/small_play_163.png')}
-          />
+        <TouchableOpacity style={styles.playAll}>
+          <Image style={styles.playIcon} source={require('../../images/small_play_163.png')}/>
           <Text style={styles.playTxt}>播放全部</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <FlatList
         style={styles.list}
@@ -55,13 +52,11 @@ export default function Account(props) {
           const { picUrl, name, singer } = item
           return (
             <View style={styles.renderItem}>
-              <TouchableOpacity style={styles.wrapper} onPress={()=>{
-                gotoPlayDetail(item)
-              }}>
+              <TouchableOpacity style={styles.wrapper} onPress={()=>(gotoPlayDetail(item))}>
                 <Image style={styles.image} source={{ uri: picUrl }} defaultSource={require('../../images/loading.png')}/>
                 <View style={styles.right}>
-                <Text style={styles.title} numberOfLines={1}>{ name }</Text>
-                <Text style={styles.desc} numberOfLines={1}>{ singer }</Text>
+                  <Text style={styles.title} numberOfLines={1}>{ name }</Text>
+                  <Text style={styles.desc} numberOfLines={1}>{ singer }</Text>
                 </View>
               </TouchableOpacity>
             </View>

@@ -35,7 +35,7 @@ export default function RootHome(props) {
         tabStyle={{height: 43, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}/>}
       >
         <Recommend tabLabel='推荐' gotoDetail={gotoDetail} gotoPlayDetail={gotoPlayDetail}/>
-        <Singer tabLabel='歌手'/>
+        <Singer tabLabel='歌手' {...props}/>
         <Rank tabLabel='排行'/>
         <Search tabLabel='搜索' gotoPlayDetail={gotoPlayDetail}/>
       </ScrollableTabView>

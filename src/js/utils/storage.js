@@ -1,4 +1,5 @@
 import Storage from 'react-native-storage'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const storage = new Storage({
   // maximum capacity, default 1000 key-ids
@@ -21,6 +22,31 @@ const storage = new Storage({
   sync: {
     // we'll talk about the details later.
   }
-});
+})
 
-export default storage;
+const FAVORITE_LIST_KEY  =  'FAVORITE_LIST_KEY'
+const HISTORY_LIST_KEY   =  'HISTORY_LIST_KEY'
+
+export const saveFavoriteSong = (song) => {
+  // queryFavoriteList().then((res) => {
+
+  // })
+  storage.save({ key: FAVORITE_LIST_KEY, data: song })
+}
+
+export const queryFavoriteList = () => {
+  return new Promise((resolve, reject) => {
+    storage.load({
+      key: FAVORITE_LIST_KEY
+    })
+    .then((ret) => {
+      console.log(ret)
+      resolve(ret)
+    })
+    .catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+// export default storage;

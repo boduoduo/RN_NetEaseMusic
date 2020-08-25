@@ -3,7 +3,9 @@ import {
   Text,
   View,
   FlatList,
-  StyleSheet
+  StyleSheet,
+  Animated,
+  Easing
  } from 'react-native'
 
 import Swiper from 'react-native-swiper'
@@ -39,9 +41,9 @@ export default function PlayerMiddle(props) {
 
   useEffect(() => {
     if (isPlaying) {
-      animateImage.current.animate(rotate)
+      rotateAnim()
     } else {
-      animateImage.current.stopAnimation()
+      spinValue.stopAnimation()
     }
     return () => {}
   }, [isPlaying])
@@ -69,6 +71,41 @@ export default function PlayerMiddle(props) {
     return () => {}
   }, [currentIdx])
 
+  const spinValue = useRef(new Animated.Value(0)).current;
+
+  const spin = spinValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg']
+  })
+
+  const rotateAnim = () => {
+    // Animated.loop(
+    //   Animated.timing(
+    //     spinValue,
+    //     {
+    //       toValue: 1,
+    //       duration: 10000,
+    //       easing: Easing.linear,
+    //       useNativeDriver: true
+    //     }
+    //   )
+    // ).start()
+    spinValue.setValue(0)
+    Animated.timing(
+      spinValue,
+      {
+        toValue: 1,
+        duration: 10000,
+        easing: Easing.linear,
+        useNativeDriver: false
+      }
+    ).start((e) => {
+      if (e.finished) {
+        rotateAnim()
+      }
+    })
+  }
+
   const rotate = {
     from: {
       rotate: '0deg',
@@ -82,7 +119,7 @@ export default function PlayerMiddle(props) {
     <View style={styles.container}>
       <Swiper style={styles.wrapper} loop={false}>
         <View style={styles.slide1}>
-          <Animatable.Image
+          {/* <Animatable.Image
             ref={animateImage}
             animation={rotate}
             delay={1000}
@@ -93,7 +130,15 @@ export default function PlayerMiddle(props) {
             useNativeDriver
             style={styles.poster}
             source={{ uri: rotateImage }}
-            />
+          /> */}
+          <Animated.Image
+            style={[styles.poster, 
+              {
+                transform: [{rotate: spin}] 
+              }
+            ]}
+            source={{ uri: rotateImage }}
+          />
           <Text style={styles.songDesc}>{ songDesc }</Text>
         </View>
         <View style={styles.slide2}>

@@ -9,12 +9,12 @@ import { BlurView } from 'react-native-blur'
 import Video from 'react-native-video'
 import { getSongDetail, getSongURL, getSongLyric } from '../../js/api/index'
 import { PlayerContext } from '../../store/store'
-import { insertFavoriteSong } from '../../js/utils/realm'
+import { SET_IS_PLAYING, SET_SONG_LYRIC } from '../../store/actionTypes'
+// import { saveFavoriteSong } from '../../js/utils/storage'
 
 import PlayerHeader from './PlayerHeader'
 import PlayerBottom from './PlayerBottom'
 import PlayerMiddle from './PlayerMiddle'
-import { SET_IS_PLAYING, SET_SONG_LYRIC } from '../../store/actionTypes'
 
  export default  function PlayerDetail(props) {
 
@@ -90,12 +90,13 @@ import { SET_IS_PLAYING, SET_SONG_LYRIC } from '../../store/actionTypes'
 
   const favoriteBtnClicked = (flag) => {
     if (flag) {
-      insertFavoriteSong({
+      let songs = [{
         id: id,
-        singer: singer,
         name: songName,
-        picUrl: picUrl
-      })
+        picUrl: picUrl,
+        singer: singer
+      }]
+      // saveFavoriteSong(songs)
     }
   }
 
