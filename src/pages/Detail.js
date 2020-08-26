@@ -36,6 +36,8 @@ export default function Detail(props) {
       getSubAlbumDetail()
     } else if (sourceType === 'singer') {
       getSubArtistsDetail()
+    } else if (sourceType === 'rank') {
+      getSubTopList()
     }
     
     return () => {}
@@ -75,7 +77,13 @@ export default function Detail(props) {
   }
   // 排行榜歌单详情
   const getSubTopList = () => {
-
+    // 排行榜歌单详情
+    getTopList({ idx: id })
+    .then(res => {
+      setPlaylist(res.playlist.tracks || [])
+      setCoverImgUrl((res.playlist.creator || {}).backgroundUrl || '' )
+      setTitle((res.playlist || {}).name || '')
+    })
   }
 
   const header = () => {

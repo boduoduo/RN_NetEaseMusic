@@ -36,7 +36,7 @@ export default function RootHome(props) {
       >
         <Recommend tabLabel='推荐' gotoDetail={gotoDetail} gotoPlayDetail={gotoPlayDetail}/>
         <Singer tabLabel='歌手' {...props}/>
-        <Rank tabLabel='排行'/>
+        <Rank tabLabel='排行' {...props}/>
         <Search tabLabel='搜索' gotoPlayDetail={gotoPlayDetail}/>
       </ScrollableTabView>
     </View>
