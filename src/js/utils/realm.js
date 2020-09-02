@@ -79,6 +79,6 @@ export const queryHistoryList = () => {
 
 export const deleteHistorySong = (id) => {
   realm.write(() => {
-    realm.delete(realm.objects('HistoryList').filtered('id ==' + id + ''))
+    realm.delete(realm.objects('HistoryList').filtered('id == "' + id + '"'))
   })
 }
