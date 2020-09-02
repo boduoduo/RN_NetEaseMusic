@@ -11,6 +11,7 @@ import { getSongDetail, getSongURL, getSongLyric } from '../../js/api/index'
 import { PlayerContext } from '../../store/store'
 import { SET_IS_PLAYING, SET_SONG_LYRIC } from '../../store/actionTypes'
 // import { saveFavoriteSong } from '../../js/utils/storage'
+import { insertFavoriteSong, deleteFavoriteSong } from '../../js/utils/realm'
 
 import PlayerHeader from './PlayerHeader'
 import PlayerBottom from './PlayerBottom'
@@ -90,13 +91,15 @@ import PlayerMiddle from './PlayerMiddle'
 
   const favoriteBtnClicked = (flag) => {
     if (flag) {
-      let songs = [{
-        id: id,
+      let song = {
+        id: id.toString(),
         name: songName,
         picUrl: picUrl,
         singer: singer
-      }]
-      // saveFavoriteSong(songs)
+      }
+      insertFavoriteSong(song)
+    } else {
+      deleteFavoriteSong(id.toString())
     }
   }
 
@@ -153,6 +156,7 @@ import PlayerMiddle from './PlayerMiddle'
           currentTime={currentTime}
           duration={duration}
           isPlaying={isPlaying}
+          id={id}
           playClicked={()=>{
             dispatch({type: SET_IS_PLAYING, isPlaying: !isPlaying})
             setIsPlaying(!isPlaying)

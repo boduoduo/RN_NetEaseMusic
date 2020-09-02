@@ -20,6 +20,7 @@ export default function SearchHistory() {
   return (
     <View style={styles.container}>
       <FlatList
+        keyExtractor={item=>item.id}
         data={list}
         renderItem={()=>{
           return (

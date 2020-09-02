@@ -12,16 +12,17 @@ import { formartTime } from '../../js/utils/utils'
 import mode from '../../store/mode'
 import { PlayerContext } from '../../store/store'
 import { SET_MODE_TYPE } from '../../store/actionTypes'
+import { isFavorited } from '../../js/utils/realm'
 
 export default function PlayerBottom(props) {
   const { state, dispatch } = useContext(PlayerContext)
   // 播放模式
   const { playMode } = state
 
-  const { currentTime, duration, isPlaying } = props
+  const { currentTime, duration, isPlaying, id } = props
   const [playIcon, setPlayIcon] = useState(require('../../images/pause_163.png'))
   // 喜欢状态
-  const [favoriteStatus, setFavoriteStatus] = useState(false)
+  const [favoriteStatus, setFavoriteStatus] = useState(isFavorited(id))
   const [favoriteImage, setFavoriteImage] = useState(require('../../images/un_favorite_163.png'))
   // 模式图片
   const [modeIcon, setModeIcon] = useState(require('../../images/loop_163.png'))
@@ -65,6 +66,11 @@ export default function PlayerBottom(props) {
     }
     return () => {}
   }, [playMode])
+
+  useEffect(() => {
+    
+    return () => {}
+  }, [])
 
   // 切换播放模式
   const modeChange = () => {

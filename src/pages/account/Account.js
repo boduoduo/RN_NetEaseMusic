@@ -10,20 +10,15 @@ import {
 
 import AccountHeader from './AccountHeader'
 // import { queryFavoriteList } from '../../js/utils/storage'
+import { queryFavoriteList } from '../../js/utils/realm'
 
 export default function Account(props) {
 
-  const [favoriteList, setFavoriteList] = useState([
-    {id: 1, name: 'xaxas'},
-    {id: 2, name: 'fgfdbgf'},
-    {id: 3, name: 'efwew'},
-    {id: 4, name: 'ynyju'},
-    {id: 5, name: 'wreret'},
-  ])
+  const [favoriteList, setFavoriteList] = useState([])
 
   useEffect(() => {
-    // let list = queryFavoriteList()
-    // console.log(list, 'list')
+    let list = queryFavoriteList()
+    setFavoriteList(list)
     return () => {}
   }, [])
 
@@ -32,7 +27,7 @@ export default function Account(props) {
   }
 
   const gotoPlayDetail = (item) => {
-
+    props.navigation.navigate("playerDetail", item)
   }
 
   return (

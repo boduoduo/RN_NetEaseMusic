@@ -44,7 +44,7 @@ export default function Search(props) {
         }
       })
       valid = true
-    }, 500)
+    }, 800)
     return () => {}
   }, [keywords])
 

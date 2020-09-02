@@ -3,7 +3,7 @@ const FavoriteSongsSchema = {
   name: 'FavoriteList',
   primaryKey: 'id',
   properties: {
-    id: 'int',
+    id: 'string',
     name: 'string',
     singer: 'string',
     picUrl: 'string'
@@ -14,7 +14,7 @@ const HistorySongsSchema = {
   name: 'HistoryList',
   primaryKey: 'id',
   properties: {
-    id: 'int',
+    id: 'string',
     name: 'string',
     singer: 'string',
     picUrl: 'string'
@@ -26,9 +26,11 @@ const realm = new Realm({ schema: [FavoriteSongsSchema, HistorySongsSchema] })
 
 export const insertFavoriteSong = (song) => {
   let result = queryFavoriteList()
+  // console.log(result, 'query all')
   let findSong = result.find((currentSong) => {
     return currentSong.id == song.id
   })
+  console.log(findSong, 'findSong');
   if (findSong === undefined) {
     realm.write(()=>{
       realm.create('FavoriteList', song)
@@ -36,9 +38,18 @@ export const insertFavoriteSong = (song) => {
   }
 }
 
+export const isFavorited = (id) => {
+  const result = queryFavoriteList()
+  // console.log(result, 'query all')
+  let findSong = result.find((currentSong) => {
+    return currentSong.id == id
+  })
+  return findSong !== undefined
+}
+
 export const deleteFavoriteSong = (id) => {
   realm.write(() => {
-    realm.delete(realm.objects('FavoriteList').filtered('id ==' + id + ''))
+    realm.delete(realm.objects('FavoriteList').filtered('id == "' + id + '"'))
   })
 }
 
