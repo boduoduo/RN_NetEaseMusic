@@ -10,20 +10,22 @@ import {
 
 import AccountHeader from './AccountHeader'
 // import { queryFavoriteList } from '../../js/utils/storage'
-import { queryFavoriteList } from '../../js/utils/realm'
+import { queryFavoriteList, queryHistoryList } from '../../js/utils/realm'
 
 export default function Account(props) {
 
   const [favoriteList, setFavoriteList] = useState([])
+  const [historyList, setHistoryList] = useState([])
+  const [selectIndex, setSelectIndex] = useState(0)
 
   useEffect(() => {
-    let list = queryFavoriteList()
-    setFavoriteList(list)
+    setFavoriteList(queryFavoriteList())
+    setHistoryList(queryHistoryList())
     return () => {}
   }, [])
 
   const topBarSelected = (index) => {
-    console.log(index)
+    setSelectIndex(index)
   }
 
   const gotoPlayDetail = (item) => {
@@ -42,7 +44,7 @@ export default function Account(props) {
       <FlatList
         style={styles.list}
         keyExtractor={(item)=>item.id.toString()}
-        data={favoriteList}
+        data={ selectIndex === 1 ? historyList : favoriteList }
         renderItem={({ item })=>{
           const { picUrl, name, singer } = item
           return (

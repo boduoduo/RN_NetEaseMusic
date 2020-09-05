@@ -9,31 +9,32 @@ import {
 } from 'react-native'
 
 
-export default function SearchHistory() {
-  const [list, setList] = useState([
-    {id: 1, name: '毛发看'},
-    {id: 2, name: '毛发看'},
-    {id: 3, name: '毛发看'},
-    {id: 4, name: '毛发看'},
-  ])
+export default function SearchHistory(props) {
+  let { historyList } = props
 
   return (
     <View style={styles.container}>
       <FlatList
         keyExtractor={item=>item.id}
-        data={list}
-        renderItem={()=>{
+        data={historyList}
+        renderItem={({ item })=>{
+          const { word } = item
           return (
             <View style={styles.item}>
               <Image 
                 style={styles.clock} 
                 source={require('../../images/clock.png')}
               />
-              <Text style={styles.searchTxt}>jiangnan</Text>
-              <Image 
-                style={styles.delete}
-                source={require('../../images/small_del_163.png')} 
-              />
+              <Text 
+               style={styles.searchTxt}
+               onPress={()=>props.fillKeywordToInput(word)}
+              >{ word }</Text>
+              <TouchableOpacity onPress={()=>props.deleteSearchWord(word)}>
+                <Image
+                  style={styles.delete}
+                  source={require('../../images/small_del_163.png')} 
+                />
+              </TouchableOpacity>
             </View>
           )
         }}
@@ -44,7 +45,6 @@ export default function SearchHistory() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
   },
   list: {
   },
@@ -65,7 +65,9 @@ const styles = StyleSheet.create({
   searchTxt: {
     flex: 1,
     color: '#666',
-    marginLeft: 12
+    marginLeft: 12,
+    height: 40,
+    lineHeight: 40
   },
   delete: {
     marginRight: 12,

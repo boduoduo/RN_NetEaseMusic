@@ -11,7 +11,11 @@ import { getSongDetail, getSongURL, getSongLyric } from '../../js/api/index'
 import { PlayerContext } from '../../store/store'
 import { SET_IS_PLAYING, SET_SONG_LYRIC } from '../../store/actionTypes'
 // import { saveFavoriteSong } from '../../js/utils/storage'
-import { insertFavoriteSong, deleteFavoriteSong } from '../../js/utils/realm'
+import { 
+  insertFavoriteSong, 
+  deleteFavoriteSong, 
+  insertHistorySong 
+} from '../../js/utils/realm'
 
 import PlayerHeader from './PlayerHeader'
 import PlayerBottom from './PlayerBottom'
@@ -85,6 +89,19 @@ import PlayerMiddle from './PlayerMiddle'
     }
   }, [])
 
+  useEffect(() => {
+    if (isPlaying) {
+      let song = {
+        id: id.toString(),
+        name: songName,
+        picUrl: picUrl,
+        singer: singer
+      }
+      insertHistorySong(song)
+    }
+    return () => {}
+  }, [isPlaying])
+
   const back = () => {
     props.navigation.pop()
   }
@@ -93,9 +110,9 @@ import PlayerMiddle from './PlayerMiddle'
     if (flag) {
       let song = {
         id: id.toString(),
-        name: songName,
-        picUrl: picUrl,
-        singer: singer
+        name: songName || '',
+        picUrl: picUrl || '',
+        singer: singer || ''
       }
       insertFavoriteSong(song)
     } else {
@@ -121,8 +138,6 @@ import PlayerMiddle from './PlayerMiddle'
   const onProgress = (e) => {
     // 当前播放时间点
     setCurrentTime(e.currentTime)
-    // 总时长
-    // setDuration(e.playableDuration)
   }
 
   const slideValueChanged = (value) => {
@@ -130,6 +145,15 @@ import PlayerMiddle from './PlayerMiddle'
     setCurrentTime(changedTime)
     if (video) {
       video.current.seek(changedTime)
+    }
+  }
+
+  const playClicked = () => {
+    if (songURL && songName) {
+      dispatch({type: SET_IS_PLAYING, isPlaying: !isPlaying})
+      setIsPlaying(!isPlaying)
+    } else {
+      console.log('The song is not ready');
     }
   }
 
@@ -157,10 +181,7 @@ import PlayerMiddle from './PlayerMiddle'
           duration={duration}
           isPlaying={isPlaying}
           id={id}
-          playClicked={()=>{
-            dispatch({type: SET_IS_PLAYING, isPlaying: !isPlaying})
-            setIsPlaying(!isPlaying)
-          }}
+          playClicked={playClicked}
           slideValueChanged={slideValueChanged}
           favoriteBtnClicked={favoriteBtnClicked}
         />

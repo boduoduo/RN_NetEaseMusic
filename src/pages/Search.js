@@ -10,6 +10,7 @@ import HotSearch from './search/HotSearch'
 import SearchSuggestion from './search/SearchSuggestion'
 import SearchHistory from './search/SearchHistory'
 import { getSearchList, getSearchHot } from '../js/api/index'
+import { insertSearchWords, querySearchList, deleteSearchWords } from '../js/utils/realm'
 
 export default function Search(props) {
   const [historyList, setHistoryList] = useState([])
@@ -24,6 +25,8 @@ export default function Search(props) {
         setHotSearchs((res.result || {}).hots || [])
       }
     })
+    // 历史搜索
+    setHistoryList(querySearchList())
     return () => {}
   }, [])
 
@@ -58,6 +61,18 @@ export default function Search(props) {
 
   const suggestionClicked = (item) => {
     props.gotoPlayDetail(item)
+    insertSearchWords(keywords)
+  }
+
+  const deleteSearchWord = (word) => {
+    deleteSearchWords(word)
+    setTimeout(() => {
+      setHistoryList(querySearchList())
+    }, 500)
+  }
+
+  const fillKeywordToInput = (word) => {
+    setKeywords(word)
   }
 
   return (
@@ -70,6 +85,7 @@ export default function Search(props) {
           maxLength={100}
           onChangeText={valueChanged}
           value={keywords}
+          clearButtonMode="while-editing"
         />
       </View>
       {
@@ -79,8 +95,15 @@ export default function Search(props) {
         :
         <View>
           {/* 热门搜索 */}
-          <HotSearch hotSearchs={hotSearchs} hotItemClicked={hotItemClicked}/>
-          <SearchHistory historyList={historyList}/>
+          <HotSearch 
+            hotSearchs={hotSearchs} 
+            hotItemClicked={hotItemClicked}
+          />
+          <SearchHistory 
+            historyList={historyList} 
+            deleteSearchWord={deleteSearchWord}
+            fillKeywordToInput={fillKeywordToInput}
+          />
         </View>
       }
     </View>

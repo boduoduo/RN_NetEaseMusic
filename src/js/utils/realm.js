@@ -21,17 +21,21 @@ const HistorySongsSchema = {
   }
 }
 
+const SearchWordsSchema = {
+  name: 'SearchList',
+  properties: {
+    word: 'string'
+  }
+}
+
 const Realm = require('realm')
-const realm = new Realm({ schema: [FavoriteSongsSchema, HistorySongsSchema] })
+const realm = new Realm({ 
+  schema: [FavoriteSongsSchema, HistorySongsSchema, SearchWordsSchema] 
+})
 
 export const insertFavoriteSong = (song) => {
-  let result = queryFavoriteList()
-  // console.log(result, 'query all')
-  let findSong = result.find((currentSong) => {
-    return currentSong.id == song.id
-  })
-  console.log(findSong, 'findSong');
-  if (findSong === undefined) {
+  let res = isFavorited(song.id)
+  if (!res) {
     realm.write(()=>{
       realm.create('FavoriteList', song)
     })
@@ -39,12 +43,12 @@ export const insertFavoriteSong = (song) => {
 }
 
 export const isFavorited = (id) => {
-  const result = queryFavoriteList()
-  // console.log(result, 'query all')
-  let findSong = result.find((currentSong) => {
-    return currentSong.id == id
-  })
-  return findSong !== undefined
+  let result = realm.objects('FavoriteList').filtered('id == "' + id + '"')
+  // console.log(result, 'isFavorited', Object.keys(result))
+  if (Object.keys(result).length) {
+    return true
+  }
+  return false
 }
 
 export const deleteFavoriteSong = (id) => {
@@ -58,13 +62,11 @@ export const queryFavoriteList = () => {
 }
 
 export const insertHistorySong = (song) => {
-  let result = queryHistoryList()
-  let findIndex = result.find((currentSong) => {
-    return currentSong.id == song.id
-  })
-  if (findIndex === undefined) {
-    if (result.length > 30) {
-      const firstId = result[0].id || 0
+  let list = queryHistoryList()
+  let result = realm.objects('HistoryList').filtered('id == "' + song.id + '"')
+  if (Object.keys(result).length === 0) {
+    if (list.length > 30) {
+      const firstId = list[0].id || 0
       deleteHistorySong(firstId)
     }
     realm.write(()=>{
@@ -80,5 +82,24 @@ export const queryHistoryList = () => {
 export const deleteHistorySong = (id) => {
   realm.write(() => {
     realm.delete(realm.objects('HistoryList').filtered('id == "' + id + '"'))
+  })
+}
+
+export const insertSearchWords = (word) => {
+  let result = realm.objects('SearchList').filtered('word == "' + word + '"')
+  if (Object.keys(result).length === 0) {
+    realm.write(()=>{
+      realm.create('SearchList', { word })
+    })
+  }
+}
+
+export const querySearchList = () => {
+  return realm.objects('SearchList')
+}
+
+export const deleteSearchWords = (word) => {
+  realm.write(() => {
+    realm.delete(realm.objects('SearchList').filtered('word == "' + word + '"'))
   })
 }
