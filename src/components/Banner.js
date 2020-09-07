@@ -4,8 +4,7 @@ import {
   StyleSheet,
   Dimensions, 
   Image, 
-  TouchableOpacity,
-  Alert 
+  TouchableOpacity
 } from 'react-native'
 import Swiper from 'react-native-swiper'
 

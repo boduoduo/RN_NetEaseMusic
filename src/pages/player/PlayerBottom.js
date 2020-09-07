@@ -118,13 +118,11 @@ export default function PlayerBottom(props) {
           <Image style={styles.item} source={require('../../images/prev_163.png')}/>
         </TouchableOpacity>
         {/* 播放/暂停 */}
-        <TouchableOpacity onPress={()=>{
-          props.playClicked()
-        }}>
+        <TouchableOpacity onPress={()=>(props.playClicked())}>
           <Image style={styles.item} source={playIcon}/>
         </TouchableOpacity>
         {/* 下一首 */}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>console.log('next song')}>
           <Image style={styles.item} source={require('../../images/next_163.png')}/>
         </TouchableOpacity>
         {/* 喜欢 */}
